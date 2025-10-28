@@ -1,4 +1,4 @@
 package com.example.busbookingmanagement.entity;
 
-public class Trip {
+public class Ticket {
 }
