@@ -2,11 +2,14 @@ package com.example.busbookingmanagement.service.impl;
 
 import com.example.busbookingmanagement.DTO.response.BookingResponse;
 import com.example.busbookingmanagement.entity.Booking;
+import com.example.busbookingmanagement.entity.Seat;
 import com.example.busbookingmanagement.repository.BookingRepository;
+import com.example.busbookingmanagement.repository.SeatRepository;
 import com.example.busbookingmanagement.service.BookingService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
+    private final SeatRepository seatRepository;
 
     @Override
     public List<BookingResponse> getAll() {
@@ -64,6 +68,34 @@ public class BookingServiceImpl implements BookingService {
                 .filter(b -> b.getUser() != null && userId.equals(b.getUser().getUserId()))
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void selectSeats(Long bookingId, List<Long> seatIds) {
+        bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        List<Seat> seats = seatRepository.findAllById(seatIds);
+        for (Seat seat : seats) {
+            if (seat.getStatus() != Seat.Status.AVAILABLE) {
+                throw new IllegalStateException("Seat " + seat.getSeatNumber() + " is not available");
+            }
+            seat.setStatus(Seat.Status.BOOKED);
+            seatRepository.save(seat);
+            // TODO: Tạo ticket cho booking-seat nếu cần
+        }
+    }
+
+    @Override
+    @Transactional
+    public void cancelSeat(Long bookingId, Long seatId) {
+        bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        Seat seat = seatRepository.findById(seatId)
+                .orElseThrow(() -> new EntityNotFoundException("Seat not found"));
+        seat.setStatus(Seat.Status.AVAILABLE);
+        seatRepository.save(seat);
+        // TODO: Xóa ticket booking-seat nếu cần
     }
 
     // Helper method: convert entity → DTO

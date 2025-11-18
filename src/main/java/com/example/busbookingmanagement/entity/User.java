@@ -24,15 +24,12 @@ public class User {
     private String password;
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.CUSTOMER;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.ACTIVE;
-
-    public enum Role {
-        ADMIN, STAFF, CUSTOMER
-    }
 
     public enum Status {
         ACTIVE, INACTIVE

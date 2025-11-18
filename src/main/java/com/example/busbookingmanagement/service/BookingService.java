@@ -12,4 +12,6 @@ public interface BookingService {
     BookingResponse update(Long id, Booking booking);
     void delete(Long id);
     List<BookingResponse> getByUserId(Long userId);
+    void selectSeats(Long bookingId, List<Long> seatIds);
+    void cancelSeat(Long bookingId, Long seatId);
 }
