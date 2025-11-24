@@ -1,4 +1,5 @@
 package com.example.busbookingmanagement.service.impl;
+
 import com.example.busbookingmanagement.DTO.request.AuthRequest;
 import com.example.busbookingmanagement.DTO.request.RegisterRequest;
 import com.example.busbookingmanagement.DTO.response.AuthResponse;
@@ -41,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getFullName(), user.getRole().getRoleName());
+        return new AuthResponse(token, user.getFullName(), user.getPhone(), user.getRole().getRoleName());
     }
 
     @Override
@@ -57,6 +58,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getFullName(), user.getRole().getRoleName());
+        return new AuthResponse(token, user.getFullName(), user.getPhone(), user.getRole().getRoleName());
     }
 }

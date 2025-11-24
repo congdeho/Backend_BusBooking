@@ -26,7 +26,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws ServletException, IOException {
         String path = req.getServletPath();
-        if (path.startsWith("/api/auth") || path.startsWith("/swagger-ui") || path.startsWith("/api-docs") || path.startsWith("/v3/api-docs")) {
+        // exclude auth, swagger, api-docs and websocket handshake paths from JWT processing
+        if (path.startsWith("/api/auth") ||
+            path.startsWith("/swagger-ui") ||
+            path.startsWith("/api-docs") ||
+            path.startsWith("/v3/api-docs") ||
+            path.startsWith("/ws")) {
             chain.doFilter(req, res);
             return;
         }

@@ -10,6 +10,6 @@ import lombok.Data;
 public class AuthResponse {
     private String token;
     private String fullName;
+    private String phone; // added phone field
     private String role;
 }
-
