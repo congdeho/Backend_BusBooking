@@ -12,4 +12,6 @@ public class AuthResponse {
     private String fullName;
     private String phone; // added phone field
     private String role;
+    private Long userId; // new field: user id
+    private String email; // new field: user email
 }

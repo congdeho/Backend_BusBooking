@@ -13,4 +13,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByRoute_RouteId(Long routeId);
 
     List<Schedule> findByDepartureTimeBetween(LocalDateTime start, LocalDateTime end);
+
+    // Find schedules for a given route where departureTime falls within a day
+    List<Schedule> findByRoute_RouteIdAndDepartureTimeBetween(Long routeId, LocalDateTime start, LocalDateTime end);
 }

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -19,7 +21,21 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @GetMapping
-    public List<ScheduleResponse> getAll() {
+    public List<ScheduleResponse> getAll(
+            @RequestParam(value = "routeId", required = false) Long routeId,
+            @RequestParam(value = "date", required = false) String dateStr
+    ) {
+        if (routeId != null && dateStr != null) {
+            try {
+                LocalDate date = LocalDate.parse(dateStr);
+                return scheduleService.getByRouteAndDate(routeId, date);
+            } catch (DateTimeParseException ex) {
+                // invalid date format -> return empty list (frontend should validate)
+                return List.of();
+            }
+        } else if (routeId != null) {
+            return scheduleService.getByRoute(routeId);
+        }
         return scheduleService.getAll();
     }
 

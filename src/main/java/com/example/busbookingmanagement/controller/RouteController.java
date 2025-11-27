@@ -18,9 +18,14 @@ public class RouteController {
 
     private final RouteService routeService;
 
-    @Operation(summary = "Lấy danh sách tất cả tuyến xe")
+    @Operation(summary = "Lấy danh sách tất cả tuyến xe hoặc tìm theo start/end")
     @GetMapping
-    public ResponseEntity<List<RouteResponse>> getAllRoutes() {
+    public ResponseEntity<List<RouteResponse>> getAllRoutes(
+            @RequestParam(value = "startPoint", required = false) String startPoint,
+            @RequestParam(value = "endPoint", required = false) String endPoint) {
+        if (startPoint != null || endPoint != null) {
+            return ResponseEntity.ok(routeService.findByStartAndEnd(startPoint, endPoint));
+        }
         return ResponseEntity.ok(routeService.getAllRoutes());
     }
 

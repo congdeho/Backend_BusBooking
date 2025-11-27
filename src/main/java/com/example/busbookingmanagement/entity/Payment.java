@@ -30,8 +30,10 @@ public class Payment {
     @Column(nullable = false)
     private Double amount;
 
+    @Builder.Default
     private LocalDateTime paymentTime = LocalDateTime.now();
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Status status = Status.PENDING;

@@ -1,23 +1,28 @@
 package com.example.busbookingmanagement.DTO.response;
 
+import com.example.busbookingmanagement.service.dto.PriceBreakdown;
 import lombok.*;
 
-@Data
-@Builder
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ScheduleResponse {
     private Long scheduleId;
-    private String startPoint;
-    private String endPoint;
-    private Double distanceKm;
-    private Double basePrice;
-
-    private String busLicensePlate;
+    private Long routeId;
+    private Long busId;
     private String busType;
+    private LocalDateTime departureTime;
+    private LocalDateTime arrivalTime;
     private Integer availableSeats;
-
-    private String departureTime;
-    private String arrivalTime;
     private String status;
+
+    // pricing
+    private Integer basePrice;
+    private Integer computedPrice;
+    private PriceBreakdown priceBreakdown;
 }
+

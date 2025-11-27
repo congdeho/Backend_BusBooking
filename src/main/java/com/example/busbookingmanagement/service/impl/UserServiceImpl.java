@@ -4,6 +4,7 @@ import com.example.busbookingmanagement.entity.User;
 import com.example.busbookingmanagement.repository.UserRepository;
 import com.example.busbookingmanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAll() { return userRepository.findAll(); }
 
@@ -26,10 +28,12 @@ public class UserServiceImpl implements UserService {
                     u.setFullName(user.getFullName());
                     u.setPhone(user.getPhone());
                     u.setStatus(user.getStatus());
+                    if (user.getPassword() != null && !user.getPassword().isBlank()) {
+                        u.setPassword(passwordEncoder.encode(user.getPassword()));
+                    }
                     return userRepository.save(u);
                 }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public void delete(Long id) { userRepository.deleteById(id); }
 }
-

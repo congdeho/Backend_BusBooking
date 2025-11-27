@@ -10,4 +10,5 @@ public interface RouteService {
     RouteResponse createRoute(RouteRequest request);
     RouteResponse updateRoute(Long id, RouteRequest request);
     void deleteRoute(Long id);
+    List<RouteResponse> findByStartAndEnd(String startPoint, String endPoint);
 }

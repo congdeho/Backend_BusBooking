@@ -63,6 +63,17 @@ public class RouteServiceImpl implements RouteService {
         routeRepository.deleteById(id);
     }
 
+    @Override
+    public List<RouteResponse> findByStartAndEnd(String startPoint, String endPoint) {
+        return routeRepository
+                .findByStartPointContainingIgnoreCaseAndEndPointContainingIgnoreCase(
+                        startPoint == null ? "" : startPoint,
+                        endPoint == null ? "" : endPoint)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
     private RouteResponse toResponse(Route route) {
         return RouteResponse.builder()
                 .routeId(route.getRouteId())
